@@ -1,0 +1,15 @@
+--GIT-- 
+git init
+git pull
+git remote add <link>
+git remote -v
+git push -u origin main
+git commit -m "nombre del commit"
+git log
+git clone <link>
+
+git checkout nombreRama
+git merge nombreRama
+git branch nombreRama
+
+PYTHON
