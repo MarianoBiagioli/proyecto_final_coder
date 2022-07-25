@@ -13,3 +13,11 @@ git merge nombreRama
 git branch nombreRama
 
 PYTHON
+cd proyectofinal
+python manage.py migrate
+python manage.py runserver
+python manage.py check AppWeb
+
+DJANGO
+django-admin startproject NombreProyecto (ya esta hecho)
+python manage.py startapp NombreApp
