@@ -9,7 +9,7 @@ class Usuario(models.Model):
     t_usuario = (("1", "Administrador"), ("2", "Docente"))
     tipo_de_usuario = models.CharField(max_length = 20, choices = t_usuario, default = "1")
     avatar = models.ImageField(upload_to="avatars", null=True, blank=True)
-    nombre_apellido = models.CharField(max_length=40)
+    nombre_apellido = models.CharField(max_length=40, help_text="Colocar su nombre y luego su apellido")
     email = models.EmailField()
     celular = models.IntegerField()
     descripcion_docente = RichTextField()
