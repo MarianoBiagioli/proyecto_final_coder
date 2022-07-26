@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
 
-
 class Usuario(models.Model):
     user = models.CharField(max_length=20)
     t_usuario = (("1", "Administrador"), ("2", "Docente"))
@@ -35,3 +34,6 @@ class Anuncio(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     date_published = models.DateTimeField()
+
+
+
