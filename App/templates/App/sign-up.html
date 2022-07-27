@@ -2,12 +2,12 @@
 
 {% block main %}
 <body>
-
+<div class="container">
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Create Account">
   </form>
-  
+</div>  
 </body>
 {% endblock %}
