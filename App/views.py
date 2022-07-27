@@ -2,17 +2,19 @@ from django.shortcuts import render
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView, View, ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from App.models import Anuncio, Usuario
 
 class RegistroUsuario(CreateView):
-    model = User
+    model = Usuario
     template_name = "sign-up.html"
-    form_class = Usuario
-    success_url = reverse_lazy()
+    form_class = UserCreationForm
+    success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
+    success_url = reverse_lazy("PanelU")
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
@@ -29,11 +31,16 @@ class BaseView(View):
         context['headline'] = Anuncio.objects.filter(is_headline=True).order_by('date_updated').first()
         return context  
 
-class About(BaseView, TemplateView):
-    template_name = "App/about.html"
+def About(request):
+    return render(request, "App/about.html", {})
 
 
 class MainPageView(BaseView, ListView):
     queryset = Anuncio.objects.all()
-    context_object_name = "articles"
+    context_object_name = "Anuncio"
     template_name = "App/index.html"
+
+class PanelUsuario(BaseView, ListView):
+    queryset = Anuncio.objects.all()
+    context_object_name = "Anuncio"
+    template_name = "App/index_log.html"
