@@ -1,8 +1,12 @@
 
 from django.contrib import admin
 from django.urls import path
-from App.views import RegistroUsuario, SignUpView
+from App.views import MainPageView, SignUpView, About, RegistroUsuario, PanelUsuario, UsuarioLogin
 
 urlpatterns = [
-    path('registro/', SignUpView.as_view())
+    path('', MainPageView.as_view(), name="Index"),
+    path('login/', UsuarioLogin.as_view()),
+    path('registro/', RegistroUsuario.as_view(), name="ResistroU"),
+    path('panelusuario/', PanelUsuario.as_view(), name="PanelU"),
+    #path('about/', About, name=About),
 ]

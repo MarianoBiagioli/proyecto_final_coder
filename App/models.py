@@ -29,7 +29,7 @@ class Anuncio(models.Model):
     avatar_docente = models.CharField(max_length=180)
     imagen = models.ImageField(upload_to="articles", null=True, blank=True)
     contacto_mail =  models.CharField(max_length=180) #models.ForeignKey(Usuario.email)
-    contacto_celular = models.CharField(max_length=180)
+    contacto_celular = models.IntegerField()
     descripcion_clase = RichTextField()
     is_headline= models.BooleanField()
     date_created = models.DateTimeField(auto_now_add=True)
