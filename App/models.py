@@ -1,42 +1,40 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils import timezone
 
 class Usuario(models.Model):
-    user = models.CharField(max_length=20)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     t_usuario = (("1", "Administrador"), ("2", "Docente"))
     tipo_de_usuario = models.CharField(max_length = 20, choices = t_usuario, default = "1")
     avatar = models.ImageField(upload_to="avatars", null=True, blank=True)
-    nombre_apellido = models.CharField(max_length=40, help_text="Colocar su nombre y luego su apellido")
-    email = models.EmailField()
     celular = models.IntegerField()
     descripcion_docente = models.CharField(max_length=1000)
     provincia = models.CharField(max_length=20)
     pais = models.CharField(max_length=20) #AGREGAR LISTADO DE PAISES
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.nombre_apellido}"
+        return f"{self.user.last_name, self.user.first_name}"
 
 
 class Anuncio(models.Model):
     titulo = models.CharField(max_length=100)
     materia = models.CharField(max_length=180)
-    autor = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING)
-    descripcion_docente_a = models.CharField(max_length=180)
-    avatar_docente = models.CharField(max_length=180)
+    autor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    #descripcion_docente_a = models.CharField(max_length=180)
+    #avatar_docente = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     imagen = models.ImageField(upload_to="articles", null=True, blank=True)
-    contacto_mail =  models.CharField(max_length=180) #models.ForeignKey(Usuario.email)
-    contacto_celular = models.IntegerField()
+    #contacto_mail =  models.CharField(max_length=180) #models.ForeignKey(Usuario.email)
+    #contacto_celular = models.IntegerField()
     descripcion_clase = models.CharField(max_length=800)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-    date_published = models.DateTimeField()
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(default=timezone.now)
 
-
+    def __str__(self):
+        return f"{self.titulo}"
 
 
 

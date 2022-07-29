@@ -1,0 +1,24 @@
+{% extends "App/base.html" %}
+
+{% block main %}
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">{{anuncio.titulo}}</h1>
+        <p class="lead text-muted">{{anuncio.descripcion_clase}}</p>
+       
+      </div>
+    </div>
+  </section>
+  <main class="flex-shrink-0">
+    <div class="container">
+      <div style="text-align:center;">
+        <img height="225" src="{{ object.image.url }}" /> 
+      </div>
+      <div style="padding-top: 2em;">
+       {{anuncio.descripcion_clase | safe }}
+      </div>
+    </div>
+  </main>
+
+{% endblock %}
