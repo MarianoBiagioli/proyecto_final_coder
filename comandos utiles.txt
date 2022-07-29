@@ -21,3 +21,5 @@ python manage.py check AppWeb
 DJANGO
 django-admin startproject NombreProyecto (ya esta hecho)
 python manage.py startapp NombreApp
+
+chequeando git
