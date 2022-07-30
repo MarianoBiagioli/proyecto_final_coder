@@ -24,9 +24,10 @@ class BaseView(View):
         context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
         return context    
 
-class PanelLogin(LoginView):
-    template_name = 'App/log-in.html'
-    next_page = reverse_lazy("panel_usuario_avisos")
+#class PanelLogin(SuccessMessageMixin, LoginView, CreateView):
+    #template_name = 'App/log-in.html'
+   # success_url = reverse_lazy("index")
+    #success_message = "¡Bienvenido!"
 
 
 class PanelLogout(LogoutView):
@@ -71,7 +72,7 @@ class AnuncioDetailView(DetailView):
 
 class RegistroUsuario(SuccessMessageMixin, CreateView):
     template_name = "sign-up.html"
-    success_url = reverse_lazy("panel_usuario_avisos")
+    success_url = reverse_lazy("index")
     form_class = UserCreationForm
     success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
 
@@ -90,7 +91,7 @@ class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ["email", "first_name", "last_name"]
 
     def get_success_url(self):
-        return reverse_lazy("user-detail", kwargs={"pk": self.request.user.id})
+        return reverse_lazy("usuario-update", kwargs={"pk": self.request.user.id})
     
     def test_func(self):
         return self.request.user.id == int(self.kwargs['pk'])
@@ -98,7 +99,9 @@ class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
-    next_page = reverse_lazy("panel_usuario_avisos")
+    next_page = reverse_lazy("index")
+
+
 
 
 # Create your views here.
@@ -130,3 +133,39 @@ class PerfilUsuario(LoginRequiredMixin,UserPassesTestMixin, DetailView):
 
     def test_func(self):
       return self.request.user.id == int(self.kwargs['pk'])
+
+
+
+def anuncios_index(request):
+    anuncios = Anuncio.objects.all()
+    context = {
+        'anuncios': anuncios
+    }
+    return render(request, 'anuncios-index.html', context)
+
+
+      ###############
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+from App.forms import ProfileForm
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+def profile_update(request, pk):
+    user = get_object_or_404(User, pk=pk)
+  
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+
+        if form.is_valid():
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.save()
+
+            return HttpResponseRedirect(reverse('usuario-update', args=[user.id]))
+    else:
+        default_data = {'first_name': user.first_name, 'last_name': user.last_name,
+                    }
+        form = ProfileForm(default_data)
+
+    return render(request, 'edicion-usuario.html', {'form': form, 'user': user})

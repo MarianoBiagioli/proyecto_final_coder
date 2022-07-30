@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+    <tbody>
+        {%for anuncio in anuncios %}
+          <tr>
+          <th scope="row">1</th>
+          <td>{{anuncio.titulo}}</td>
+          <td>{{anuncio.autor}}</td>
+          <td>{{anuncio.date_created}}</td>
+          <td>{{anuncio.date_updated}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+
+
+
+</body>
+</html>
+
+
