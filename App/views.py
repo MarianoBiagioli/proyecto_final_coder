@@ -72,7 +72,7 @@ class AnuncioDetailView(DetailView):
 
 class RegistroUsuario(SuccessMessageMixin, CreateView):
     template_name = "sign-up.html"
-    success_url = reverse_lazy("index")
+    success_url = reverse_lazy("operacion-ok")
     form_class = UserCreationForm
     success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
 
@@ -99,12 +99,16 @@ class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
-    next_page = reverse_lazy("index")
+    next_page = reverse_lazy("operacion-ok")
 
 
 
 
 # Create your views here.
+class Success(BaseView, TemplateView):
+
+    template_name = "App/operacion-ok.html"
+
 
 class About(BaseView, TemplateView):
 
@@ -135,6 +139,7 @@ class PerfilUsuario(LoginRequiredMixin,UserPassesTestMixin, DetailView):
       return self.request.user.id == int(self.kwargs['pk'])
 
 
+#ESTA VISTA EST AEN USO Y ES LA QUE LISTA LOS ANUNCIOS
 
 def anuncios_index(request):
     anuncios = Anuncio.objects.all()
@@ -169,3 +174,39 @@ def profile_update(request, pk):
         form = ProfileForm(default_data)
 
     return render(request, 'edicion-usuario.html', {'form': form, 'user': user})
+
+
+
+
+from django.shortcuts import render, redirect
+from .forms import FormularioContacto
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+
+
+# PARA FORMULARIO DE CONTACTO
+
+def homepage(request):
+	return render(request, "main/home.html")
+
+def contacto(request):
+	if request.method == 'POST':
+		form = FormularioContacto(request.POST)
+		if form.is_valid():
+			subject = "Contacto" 
+			body = {
+			'nombre': form.cleaned_data['nombre'], 
+			'apellido': form.cleaned_data['apellido'], 
+			'email': form.cleaned_data['email'], 
+			'mensaje':form.cleaned_data['mensaje'], 
+			}
+			message = "\n".join(body.values())
+
+			try:
+				send_mail(subject, message, 'admin@example.com', ['admin@example.com']) 
+			except BadHeaderError:
+				return HttpResponse('Error, vuelva a intentarlo.')
+			return redirect ("operacion-ok")
+      
+	form = FormularioContacto()
+	return render(request, "App/contacto.html", {'form':form})
