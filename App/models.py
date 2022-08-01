@@ -17,7 +17,7 @@ class Usuario(models.Model):
     date_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.user.last_name, self.user.first_name}"
+        return f"{self.user.last_name}, {self.user.first_name}"
 
 
 class Anuncio(models.Model):
