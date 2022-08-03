@@ -13,12 +13,15 @@
   <main class="flex-shrink-0">
     <div class="container">
       <div style="text-align:center;">
-        <img height="225" src="{{ object.image.url }}" /> 
+        <img height="225" src="{{ anuncio.image.url }}" /> 
       </div>
       <div style="padding-top: 2em;">
        {{anuncio.descripcion_clase | safe }}
       </div>
     </div>
   </main>
-
+  
+  <p align="right">
+    <a class="btn btn-outline-secondary" href="/" role="button">Volver</a>
+  </p>
 {% endblock %}
