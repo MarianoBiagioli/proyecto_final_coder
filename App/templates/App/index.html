@@ -1,71 +1,64 @@
 {% extends "App/base.html" %}
-
+{% load static %}
 {% block main %}
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">{{headline.title}}</h1>
-        <p class="lead text-muted">{{headline.short_content}}</p>
-       
-      </div>
+<section class="py-5 text-center container">
+  <div class="row py-lg-5">
+    <div class="col-lg-6 col-md-8 mx-auto">
+      <h1 class="fw-light">Bienvenidos a Tus Clases de Apoyo</h1>
+      <p class="lead text-muted"> Acá encontrarás a los mejores docentes para aprobar tus materias.</p>
     </div>
-  </section>
+  </div>
+</section>
+
+    <div class="row">
   
-  <body>
+    {% for anuncio in anuncios %}
+     <div class="col-md-4">
+      <div class="card mb-2">
+              <img class="card-img-top" src="{% static 'anuncio.imagen' %}">
+              <div class="card-body">
+                  <p class="card-title">{{ anuncio.tiulo }}</p>
+                  <p class="card-text">{{ anuncio.autor }}</p>
+                  <p class="card-text">{{ anuncio.materia }}</p>
+                  <p class="card-text">{{ anuncio.descripcion_clase}}</p>
+                  
+                  <a href="{% url 'anuncio-detalle' anuncio.id %}"
+                     class="btn btn-primary">
+                        Ver aviso completo
+                   </a>
+              </div>
+          </div>
+     </div>
+    {% endfor %}
+    </div>
 
-  Bienvenidos a Tus Clases de Apoyo 
-  Acá encontrarás a los mejores docentes para aprobar tus materias.
 
-  <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">titulo</th>
-      <th scope="col">Usuario</th>
-      <th scope="col">date created</th>
-      <th scope="col">date updated</th>
-      <th scope="col">actions</th>
-    </tr>
-  </thead>
-        <tbody>
-          {%for anuncio in anuncios %}
-            <tr>
-            <th scope="row">1</th>
-            <td>{{anuncio.titulo}}</td>
-            <td>{{anuncio.autor}}</td>
-            <td>{{anuncio.date_created}}</td>
-            <td>{{anuncio.date_updated}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-    </table>
-        
-   </body>
-  
 
-  
-  <div class="album py-5 bg-light">
-    <div class="container">
+{%for anuncio in anuncios %}
+<div class="album py-5 bg-light">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <div class="col">
+         <div class="card shadow-sm">
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
 
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for anuncio in anuncios %}
-        <div class="col">
-          <div class="card shadow-sm">
-            <img height="225" src="{{ anuncio.imagen.url }}" />  
-            <div class="card-body">
-              <h5 class="card-title">{{anuncio.titulo}}</h5>
-                <div class="d-flex justify-content-between align-items-end">
-                <div class="btn-group">
-                <a type="button" href="{% url 'anuncio-detalle' anuncio.id %}" class="btn btn-sm btn-outline-secondary">Leer</a>
-                </div>
-                <div class="btn-group"></div>
-                <small class="text-muted">{{anuncio.date_published}}</small>
+          <div class="card-body">
+            <p class="card-text">{{anuncio.titulo}}</p>
+            <p class="card-text">{{anuncio.autor}}</p>
+            <p class="card-text">Última actualización {{anuncio.date_update}}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Ver más</button>
               </div>
             </div>
           </div>
         </div>
-        {% endfor %}
-      </div>
+      </div>      
     </div>
   </div>
+</div>
+{% endfor %}
+    
+
+
 {% endblock %}

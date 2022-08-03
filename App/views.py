@@ -14,6 +14,19 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth import login, logout, authenticate
 
+# desde acá vistas de la home
+
+#class MainPageView(BaseView, ListView):
+#    queryset = Anuncio.objects.all()
+#    context_object_name = "Anuncio"
+#    template_name = "App/index.html"
+
+def MainPageView(request):
+    anuncios = Anuncio.objects.all()
+    context = {
+        'anuncios': anuncios
+    }
+    return render(request, 'index.html', context)
 
 #Acá vistas por tema Anuncios
 
@@ -39,6 +52,7 @@ class PanelView(LoginRequiredMixin, BaseView, ListView):
     template_name = "App/anuncios.html"    
     context_object_name = "anuncios"
 
+
 class AnuncioCreateView(LoginRequiredMixin, CreateView):
     model = Anuncio
     fields = ['titulo','materia' , 'autor', 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
@@ -59,13 +73,13 @@ class AnuncioDeleteView(LoginRequiredMixin, BaseView, DeleteView):
 
 class AnuncioDetailView(DetailView):
     model = Anuncio
-    template_name = "anuncio_detalle.html"
+    template_name = "App/anuncio_detalle.html"
     context_object_name = "anuncio"
     
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    context['portal'] = Portal.objects.order_by('date_updated').first()
-    #    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['anuncio'] = Anuncio.objects.order_by('date_updated').first()
+        return context
     
 
 #Desde acá vistas por tema Usuario/Autor anuncios
@@ -99,7 +113,7 @@ class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
-    next_page = reverse_lazy("operacion-ok")
+    next_page = reverse_lazy("perfil")
 
 
 
@@ -115,16 +129,15 @@ class About(BaseView, TemplateView):
     template_name = "App/about.html"
 
 
-class MainPageView(BaseView, ListView):
-    queryset = Anuncio.objects.all()
-    context_object_name = "Anuncio"
-    template_name = "App/index.html"
+   
 
-class PanelUsuario(BaseView, ListView):
+class PanelUsuario(LoginRequiredMixin,UserPassesTestMixin, BaseView, ListView):
     queryset = Anuncio.objects.all()
-    context_object_name = "Anuncio"
-    template_name = "App/index_log.html"
-
+    context_object_name = "anuncio"
+    template_name = "App/panel_usuario_avisos.html"
+    
+    def test_func(self):
+      return self.request.user.id == int(self.kwargs['pk'])
     
 
 
@@ -141,12 +154,7 @@ class PerfilUsuario(LoginRequiredMixin,UserPassesTestMixin, DetailView):
 
 #ESTA VISTA EST AEN USO Y ES LA QUE LISTA LOS ANUNCIOS
 
-def anuncios_index(request):
-    anuncios = Anuncio.objects.all()
-    context = {
-        'anuncios': anuncios
-    }
-    return render(request, 'anuncios-index.html', context)
+
 
 
       ###############

@@ -84,60 +84,62 @@
     
   </head>
   <body>
-    
+<!-- Inicia el panel superior de botones -->  
 <header>
-  <div class="bg-dark collapse" id="navbarHeader" style="">
+  <header class="p-3 text-bg-dark">
     <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
-        </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <h4 class="text-white">Menu</h4>
-          <ul class="list-unstyled">
-            <li><a href="/about" class="text-white">Sobre Nosotros</a></li>
-            <li><a href="/contacto" class="text-white">Contactanos</a></li>
-            <li><a href="/registro" class="text-white">Crear Usuario</a></li>
-            <li><a href="/login" class="text-white">Log In</a></li> 
-            <li><a href= "/usuario/<pk>/edit" class="text-white">Perfil</a></li> 
-            <li><a href="" class="text-white">Log Out</a></li>
-                 
-          </ul>  
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="/" class="nav-link px-2 text-white">Página de inicio</a></li>
+          <li><a href="/contacto" class="nav-link px-2 text-white">Contactanos</a></li>
+          <li><a href="/about" class="nav-link px-2 text-white">Sobre nosotros</a></li>
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Buscar aviso..." aria-label="Buscar aviso">
+        </form>
+
+        <div class="text-end">
+          <a class="btn btn-outline-light me-2" href="/login" role="button">Panel de usuario</a>
+          <a class="btn btn-warning" href="/registro" role="button">Crear cuenta</a>
         </div>
       </div>
     </div>
-  </div>
-  <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container">
-      <a href="" class="navbar-brand d-flex align-items-center">
-        <strong>{{portal.name}}</strong>
-      </a>
-      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-  </div>
+  </header>
 </header>
 
 <main>
+
 {% block main %}
+
 {% endblock %}
 
 </main>
 
-<footer class="text-muted py-5">
-  <div class="container">
-    <p class="float-end mb-1">
-      <a href="#">Go top</a>
-    </p>
-    <p class="mb-1">{{footer}}</p>
-  </div>
-</footer>
+<!--Inicia Footer-->
+<div class="container">
+  <footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3"
+      <li class="nav-item">
+        <a href="/" class="nav-link px-2 text-muted">Pagina de Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link px-2 text-muted">Panel de usuario</a>
+      </li>
+      <li class="nav-item">
+        <a href="/contacto" class="nav-link px-2 text-muted">Contactanos</a>
+      </li>
+      <li class="nav-item">
+        <a href="/about" class="nav-link px-2 text-muted">Sobre Nosotros</a>
+      </li>
+    </ul>
+    <p class="text-center text-muted"> 2022 Biagioli&Grosvald </p>
+  </footer>
+</div>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-
-
-      
-  
-
-</body></html>
+</body>
+</html>
