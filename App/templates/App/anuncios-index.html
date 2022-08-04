@@ -7,11 +7,11 @@
 <br>
 <center><h1>Anuncios de Clases Particulares</h1></center>
 <br>
+m
     <div class="row">
-    <center>
-    {% for anuncio in anuncios %}
-     <div class="col-md-6">
-         <div class="card mb-4">
+        {% for anuncio in anuncios %}
+     <div class="col-md-4">
+         <div class="card mb-2">
               <img class="card-img-top" src="{% static 'anuncio.imagen' %}">
               <div class="card-body">
                   <p class="card-title">{{ anuncio.tiulo }}</p>
