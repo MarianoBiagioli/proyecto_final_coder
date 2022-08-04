@@ -15,13 +15,6 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
 
-# desde acá vistas de la home
-
-#class MainPageView(BaseView, ListView):
-#    queryset = Anuncio.objects.all()
-#    context_object_name = "Anuncio"
-#    template_name = "App/index.html"
-
 def MainPageView(request):
     queryset = request.GET.get("buscar")    
     print(queryset)
@@ -41,17 +34,17 @@ def MainPageView(request):
 
 class BaseView(View):
 
-     def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
+        context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_created').first()
         return context 
 
-        if queryset:
-            anuncios = Anuncio.objects.filter(
-            Q(titulo__icontains = queryset) |
-            Q(descripcion__icontains = queryset)
-        ).distinct()
-        return render(request, "index.html", {'anuncios': anuncios})
+    #    if queryset:
+    #        anuncios = Anuncio.objects.filter(
+    #        Q(titulo__icontains = queryset) |
+    #        Q(descripcion__icontains = queryset)
+    #    ).distinct()
+    #    return render(request, "index.html", {'anuncios': anuncios})
 
 
 #class PanelLogin(SuccessMessageMixin, LoginView, CreateView):
@@ -63,27 +56,27 @@ class BaseView(View):
 class PanelLogout(LogoutView):
     template_name = 'App/panel_logout.html'
 
-class PanelView(LoginRequiredMixin, BaseView, ListView):
+class PanelView(LoginRequiredMixin, ListView):
     
     queryset = Anuncio.objects.all()
     template_name = "App/anuncios.html"    
     context_object_name = "anuncios"
 
 
-class AnuncioCreateView(LoginRequiredMixin, BaseView, CreateView):
+class AnuncioCreateView(LoginRequiredMixin, CreateView):
     model = Anuncio
-    fields = ['titulo','materia' , 'autor', 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
+    fields = ['titulo','materia', "autor", 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
     template_name = "App/anuncio_creacion.html"
-    success_url = reverse_lazy("panel_usuario_avisos")
+    success_url = reverse_lazy("perfil")
 
-class AnuncioUpdateView(LoginRequiredMixin, BaseView, UpdateView):
+class AnuncioUpdateView(LoginRequiredMixin, UpdateView):
     model = Anuncio
     template_name = "App/anuncio_update.html"
     fields = ['titulo','materia' , 'autor', 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
     success_url = reverse_lazy('panel_usuario_avisos')
     
 
-class AnuncioDeleteView(LoginRequiredMixin, BaseView, DeleteView):
+class AnuncioDeleteView(LoginRequiredMixin, DeleteView):
     model = Anuncio
     success_url = reverse_lazy('panel_usuario_avisos')
     
@@ -110,7 +103,7 @@ class RegistroUsuario(SuccessMessageMixin, CreateView):
 class PerfilUsuario(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     model = Usuario
-    template_name = "App/detalle-usuario.html"
+    template_name = "App/detalles-usuario.html"
 
     def test_func(self):
         return self.request.user.id == int(self.kwargs['pk'])
@@ -136,25 +129,52 @@ class UsuarioLogin(LoginView):
 
 
 # Create your views here.
-class Success(BaseView, TemplateView):
+class Success(TemplateView):
 
     template_name = "App/operacion-ok.html"
+    
+   # def test_func(self):
+   #     return self.request.user.id == int(self.kwargs['pk'])
 
 
-class About(BaseView, TemplateView):
+
+class About( TemplateView):
 
     template_name = "App/about.html"
 
 
    
 
-class PanelUsuario(LoginRequiredMixin,UserPassesTestMixin, BaseView, ListView):
-    queryset = Anuncio.objects.all()
-    context_object_name = "anuncio"
-    template_name = "App/panel_usuario_avisos.html"
+class PanelUsuario(LoginRequiredMixin, BaseView, ListView,):
     
-    def test_func(self):
-      return self.request.user.id == int(self.kwargs['pk'])
+    queryset = Anuncio.objects.all()
+    template_name = "App/panel_usuario_avisos.html"
+    context_object_name = "anuncios"
+    
+    def get_queryset(self):
+        return Anuncio.objects.filter(autor=self.request.user)
+
+
+
+
+    #def test_func(self):
+      # return self.request.user.id == int(self.kwargs['pk'])
+
+
+        
+    
+#filter(autor = )
+   # filter(autor=int("pk")).values()
+    #def test_func(self):
+      #return self.request.user.id == int(self.kwargs['pk'])
+
+
+#class PanelView(LoginRequiredMixin, BaseView, ListView):
+    
+   # queryset = Article.objects.all()
+   # template_name = "news_portal/article_list.html"    
+    #context_object_name = "articles"
+
     
 
 

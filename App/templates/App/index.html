@@ -1,5 +1,5 @@
 {% extends "App/base.html" %}
-{% load static %}
+
 {% block main %}
 <section class="py-5 text-center container">
   <div class="row py-lg-5">
@@ -32,21 +32,22 @@
  <br>
  <br>
 
+ {% load static %}
 
+ <div class="album py-5 bg-light">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
- <div class="container">
-   <div class="col-12">
-  
     {% for anuncio in anuncios %}
      <div class="col-md-4">
-      <div class="card mb-3">
-              <img class="card-img-top" src="{% static 'anuncio.imagen' %}">
+      <div class="card mb-6">
+              <img class="card-img-top" src="{% static 'anuncio.imagen' %}" >
               <div class="card-body">
                   <p class="card-title">{{ anuncio.tiulo }}</p>
                   <p class="card-text">{{ anuncio.autor }}</p>
                   <p class="card-text">{{ anuncio.materia }}</p>
                   <p class="card-text">{{ anuncio.descripcion_clase}}</p>
-                  
+                
                   <a href="{% url 'anuncio-detalle' anuncio.id %}"
                      class="btn btn-primary">
                         Ver aviso completo
@@ -55,7 +56,9 @@
           </div>
      </div>
     {% endfor %}
+    </div>
   </div>
 </div>
+
 
 {% endblock %}

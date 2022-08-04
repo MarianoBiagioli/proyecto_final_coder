@@ -6,24 +6,23 @@
       
      <a type="button" href="{% url 'anuncio-create' %}" class="btn btn-sm btn-outline-primary">Nuevo Anuncio</a> 
      <a type="button" href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger">Cerrar Sesión</a> 
-     <a type="button" href="{% url 'detalles-usuario' user.id %}" class="btn btn-sm btn-outline-success">Perfil</a> 
+     <a type="button" href="{% url 'usuario-update' user.id %}" class="btn btn-sm btn-outline-success">Perfil</a> 
 
   <table class="table">
   <thead>
     <tr>
       <th scope="col">Id</th>
-      <th scope="col">titulo</th>
+      <th scope="col">Titulo</th>
       <th scope="col">Creador</th>
-      <th scope="col">date published</th>
-      <th scope="col">date created</th>
-      <th scope="col">date updated</th>
-      <th scope="col">actions</th>
+      <th scope="col">Fecha de Creación</th>
+      <th scope="col">Fecha de última actualización</th>
+      <th scope="col">Acciones</th>
     </tr>
   </thead>
         <tbody>
           {%for anuncio in anuncios %}
             <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{anuncio.id}}</th>
             <td>{{anuncio.titulo}}</td>
             <td>{{anuncio.autor}}</td>
             <td>{{anuncio.date_created}}</td>
