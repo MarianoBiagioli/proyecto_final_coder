@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
+from django.shortcuts import render
 
 class Usuario(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
@@ -35,6 +36,14 @@ class Anuncio(models.Model):
 
     def __str__(self):
         return f"{self.titulo}"
+
+
+
+
+
+
+
+
 
 
 

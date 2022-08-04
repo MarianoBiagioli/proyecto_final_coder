@@ -13,6 +13,7 @@ from App.models import Anuncio, Usuario
 from django.db import models 
 from ckeditor.fields import RichTextField
 from django.contrib.auth import login, logout, authenticate
+from django.db.models import Q
 
 # desde acá vistas de la home
 
@@ -22,11 +23,19 @@ from django.contrib.auth import login, logout, authenticate
 #    template_name = "App/index.html"
 
 def MainPageView(request):
+    queryset = request.GET.get("buscar")    
+    print(queryset)
     anuncios = Anuncio.objects.all()
-    context = {
-        'anuncios': anuncios
-    }
-    return render(request, 'index.html', context)
+
+    if queryset:
+        anuncios = Anuncio.objects.filter(
+            Q(materia__icontains = queryset) |
+            Q(descripcion_clase__icontains = queryset)
+        ).distinct()
+
+    return render(request, "index.html", {'anuncios': anuncios})
+
+
 
 #Acá vistas por tema Anuncios
 
@@ -35,7 +44,15 @@ class BaseView(View):
      def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
-        return context    
+        return context 
+
+        if queryset:
+            anuncios = Anuncio.objects.filter(
+            Q(titulo__icontains = queryset) |
+            Q(descripcion__icontains = queryset)
+        ).distinct()
+        return render(request, "index.html", {'anuncios': anuncios})
+
 
 #class PanelLogin(SuccessMessageMixin, LoginView, CreateView):
     #template_name = 'App/log-in.html'
@@ -53,10 +70,10 @@ class PanelView(LoginRequiredMixin, BaseView, ListView):
     context_object_name = "anuncios"
 
 
-class AnuncioCreateView(LoginRequiredMixin, CreateView):
+class AnuncioCreateView(LoginRequiredMixin, BaseView, CreateView):
     model = Anuncio
     fields = ['titulo','materia' , 'autor', 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
-    template_name = "App/creacion-anuncio.html"
+    template_name = "App/anuncio_creacion.html"
     success_url = reverse_lazy("panel_usuario_avisos")
 
 class AnuncioUpdateView(LoginRequiredMixin, BaseView, UpdateView):
@@ -93,10 +110,10 @@ class RegistroUsuario(SuccessMessageMixin, CreateView):
 class PerfilUsuario(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     model = Usuario
-    template_name = "App/detalles_usuario.html"
+    template_name = "App/detalle-usuario.html"
 
     def test_func(self):
-        return self.request.user.id == int(self.kwargs['pk']) 
+        return self.request.user.id == int(self.kwargs['pk'])
 
 class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
@@ -113,7 +130,7 @@ class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
-    next_page = reverse_lazy("perfil")
+    next_page = reverse_lazy("operacion-ok")
 
 
 
@@ -218,3 +235,7 @@ def contacto(request):
       
 	form = FormularioContacto()
 	return render(request, "App/contacto.html", {'form':form})
+
+
+
+
