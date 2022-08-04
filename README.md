@@ -1,5 +1,5 @@
 # proyecto_final_coder
-Proyecto final de Martin Grosvald, Mariano Quintana y Mariano Biagioli
+Proyecto final de Martin Grosvald y Mariano Biagioli
 
 El proyecto consiste en una web para publicar clases particulares.
 
