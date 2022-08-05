@@ -51,7 +51,7 @@ class BaseView(View):
 
 
 class PanelLogout(LogoutView):
-    template_name = 'App/panel_logout.html'
+    template_name = 'App/index.html'
 
 class PanelView(LoginRequiredMixin, ListView):
     
@@ -64,13 +64,13 @@ class AnuncioCreateView(LoginRequiredMixin, CreateView):
     model = Anuncio
     fields = ['titulo','materia', "autor", 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
     template_name = "App/anuncio_creacion.html"
-    success_url = reverse_lazy("operacion-ok")
+    success_url = reverse_lazy("panel-usuario")
 
 class AnuncioUpdateView(LoginRequiredMixin, UpdateView):
     model = Anuncio
     template_name = "App/anuncio_update.html"
     fields = ['titulo','materia' , 'autor', 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
-    success_url = reverse_lazy('panel_usuario_avisos')
+    success_url = reverse_lazy('panel-usuario')
     
 
 class AnuncioDeleteView(LoginRequiredMixin, BaseView, DeleteView):
