@@ -1,7 +1,7 @@
-{% extends "App/base.html" %}
+{% extends "App/base-usuarios.html" %}
 {% block main %}
 
-<a href="{% url 'index' user.id %}">Volver a Profile</a>
+
 
 <form method="post">
     {% csrf_token %}
