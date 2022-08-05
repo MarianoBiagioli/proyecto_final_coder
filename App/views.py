@@ -109,9 +109,10 @@ class PerfilUsuario(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     model = User
+    #model = Usuario
     template_name = "App/edicion-usuario.html"
-    fields = ["email", "first_name", "last_name"]
-
+    fields = ["username", "password", "email", "first_name", "last_name", ]
+    #fields = ["celular", "descripcion_docente", "provincia"]
     def get_success_url(self):
         return reverse_lazy("usuario-update", kwargs={"pk": self.request.user.id})
     
@@ -121,7 +122,7 @@ class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
-    next_page = reverse_lazy("operacion-ok")
+    next_page = reverse_lazy("panel-usuario")
 
 
 

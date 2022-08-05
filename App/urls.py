@@ -10,18 +10,18 @@ urlpatterns = [
     path('', MainPageView, name="index"),
     path('registro/', RegistroUsuario.as_view(), name="Registro"),
     path('usuario-success/', Success.as_view(), name="operacion-ok"),
-    path('usuario/<pk>', PanelUsuario.as_view(), name="perfil"),
+    path('usuario/<pk>', PerfilUsuario.as_view(), name="perfil"),
     path("usuario/<pk>/edit", UsuarioUpdate.as_view(), name="usuario-update"),
     path('about/', About.as_view(), name="about"),
     path('contacto/', contacto, name="contacto"),
     
-    path('anuncio/<pk>/', AnuncioDetailView.as_view(), name='anuncio-detalle'), #FUNCIONANDO
-    path('anuncio/create', AnuncioCreateView.as_view(), name ="anuncio-create" ), #FUNCIONANDO
+    path('anuncio/<pk>/', AnuncioDetailView.as_view(), name='anuncio-detalle'),
+    path('anuncio/create', AnuncioCreateView.as_view(), name ="anuncio-create" ),
     path('anuncio/<pk>/update', AnuncioUpdateView.as_view(), name ="anuncio-update" ),
     path('anuncio/<pk>/delete', AnuncioDeleteView.as_view(), name ="anuncio-delete" ),
     
     path("login/", UsuarioLogin.as_view(), name="login"),
-    path("panel/<pk>", PanelUsuario.as_view(), name= "panel-usuario"),
+    path("panel/", PanelUsuario.as_view(), name= "panel-usuario"),
     path("logout/", PanelLogout.as_view(), name="logout"),
 
 
