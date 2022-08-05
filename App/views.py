@@ -94,7 +94,7 @@ class AnuncioDetailView(DetailView):
 
 class RegistroUsuario(SuccessMessageMixin, CreateView):
     template_name = "sign-up.html"
-    success_url = reverse_lazy("operacion-ok")
+    success_url = reverse_lazy("panel-usuario")
     form_class = UserCreationForm
     success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
 
