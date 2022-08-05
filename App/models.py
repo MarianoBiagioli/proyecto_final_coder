@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
+from django.shortcuts import render
 
 class Usuario(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
@@ -26,7 +27,7 @@ class Anuncio(models.Model):
     autor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     #descripcion_docente_a = models.CharField(max_length=180)
     #avatar_docente = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    imagen = models.ImageField(upload_to="App/static/img", null=True, blank=True)
+    imagen = models.ImageField(upload_to="App\static", null=True, blank=True)
     #contacto_mail =  models.CharField(max_length=180) #models.ForeignKey(Usuario.email)
     #contacto_celular = models.IntegerField()
     descripcion_clase = models.CharField(max_length=800)
@@ -35,6 +36,14 @@ class Anuncio(models.Model):
 
     def __str__(self):
         return f"{self.titulo}"
+
+
+
+
+
+
+
+
 
 
 
