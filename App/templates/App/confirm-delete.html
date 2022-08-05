@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block main %}
+<br>
+<br>
+<br>
+<br>
+
+<center>
+        <form method="post">{% csrf_token %}
+            <h2>Esta seguro que desea eliminar el anuncio: "{{ object }}"?</h2>
+            <br>
+
+            <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+        </form>
+
+</center>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}
+

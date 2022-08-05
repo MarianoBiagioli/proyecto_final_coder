@@ -29,9 +29,6 @@ def MainPageView(request):
     return render(request, "index.html", {'anuncios': anuncios})
 
 
-
-#Acá vistas por tema Anuncios
-
 class BaseView(View):
 
     def get_context_data(self, **kwargs):
@@ -67,7 +64,7 @@ class AnuncioCreateView(LoginRequiredMixin, CreateView):
     model = Anuncio
     fields = ['titulo','materia', "autor", 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
     template_name = "App/anuncio_creacion.html"
-    success_url = reverse_lazy("perfil")
+    success_url = reverse_lazy("operacion-ok")
 
 class AnuncioUpdateView(LoginRequiredMixin, UpdateView):
     model = Anuncio
@@ -76,9 +73,10 @@ class AnuncioUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('panel_usuario_avisos')
     
 
-class AnuncioDeleteView(LoginRequiredMixin, DeleteView):
+class AnuncioDeleteView(LoginRequiredMixin, BaseView, DeleteView):
     model = Anuncio
-    success_url = reverse_lazy('panel_usuario_avisos')
+    template_name = "App/confirm-delete.html"
+    success_url = reverse_lazy('operacion-ok')
     
 
 class AnuncioDetailView(DetailView):
