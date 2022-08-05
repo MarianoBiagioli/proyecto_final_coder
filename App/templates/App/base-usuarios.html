@@ -125,7 +125,7 @@
         <a href="/" class="nav-link px-2 text-muted">Pagina de Inicio</a>
       </li>
       <li class="nav-item">
-        <a href="/panel" class="nav-link px-2 text-muted">Panel de usuario</a>
+        <a href="{% url 'perfil' user.id %}" class="nav-link px-2 text-muted">Panel de usuario</a>
       </li>
       <li class="nav-item">
         <a href="/contacto" class="nav-link px-2 text-muted">Contactanos</a>

@@ -9,7 +9,7 @@
 {% block main %}
 <main class="flex-shrink-0">
     <div class="container">
-        <a type="button" href = "/panel" style="margin-top: 1em;" class="btn btn-sm btn-outline-primary" >Back to Panel</a>
+        <a type="button" href = "{% url 'perfil' user.id %}" style="margin-top: 1em;" class="btn btn-sm btn-outline-primary" >Back to Panel</a>
         <form method="post" enctype="multipart/form-data" style="margin-top: 1em;">{% csrf_token %}
         {{ form.as_p }}
         {% if request.resolver_match.url_name == "anuncio-update" %}

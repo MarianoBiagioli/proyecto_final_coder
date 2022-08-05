@@ -4,47 +4,48 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
 from django.shortcuts import render
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Usuario(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    t_usuario = (("1", "Administrador"), ("2", "Docente"))
-    tipo_de_usuario = models.CharField(max_length = 20, choices = t_usuario, default = "1")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatars", null=True, blank=True)
-    celular = models.IntegerField()
-    descripcion_docente = models.CharField(max_length=1000)
+    celular = models.IntegerField(null=True, blank=True)
+    descripcion_docente = RichTextField()
     provincia = models.CharField(max_length=20)
-    pais = models.CharField(max_length=20) #AGREGAR LISTADO DE PAISES
+    pais = models.CharField(max_length=20) 
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.last_name}, {self.user.first_name}"
 
+@receiver(post_save, sender=User)
+def create_user_usuario(sender, instance, created, **kwargs):
+    if created:
+        Usuario.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_usuario(sender, instance, **kwargs):
+    instance.usuario.save()
 
 class Anuncio(models.Model):
     titulo = models.CharField(max_length=100)
     materia = models.CharField(max_length=180)
-    autor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    #descripcion_docente_a = models.CharField(max_length=180)
-    #avatar_docente = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    imagen = models.ImageField(upload_to="App\static", null=True, blank=True)
-    #contacto_mail =  models.CharField(max_length=180) #models.ForeignKey(Usuario.email)
-    #contacto_celular = models.IntegerField()
-    descripcion_clase = models.CharField(max_length=800)
+    autor = models.ForeignKey(
+    User,
+    models.SET_NULL,
+    blank=True,
+    null=True,
+    )
+    imagen = models.ImageField(upload_to="App\static", null=True, blank=True) #sacamos cuando podamos meter imagen usuario
+    descripcion_clase = RichTextField()
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.titulo}"
-
-
-
-
-
-
-
-
-
 
 
 #ESTO NO VA PERO DEJEMOSLO POR AHORA

@@ -5,15 +5,12 @@
 <br>
 <br>
 
-
+<h2>{{ user.get_full_name }}</h2>
 <ul>
-    <li>Name: {{object.user.first_name}}<li>
-    <li>Last Name: {{object.user.last_name}}<li>
-    <li>email: {{object.user.email}} </li>
-    <li>username: {{object.user.username}}</li>
+  <li>Usuario: {{ user.username }}</li>
+  <li>Nro de Celular : {{ user.usuario.celular }}</li>
+  <li>Fecha de creación: {{ user.usuario.date_created }}</li>
 </ul>
-
-<img height="128" src="{{ object.avatar.url }}" />
 
 
 

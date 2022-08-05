@@ -8,9 +8,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from App.models import Anuncio, Usuario
+from django import forms
+from .forms import *
+from django.contrib import messages
 
 # ver de borrar lo de abajo si no se usa
-from django.db import models 
+from django.db import models, transaction 
 from ckeditor.fields import RichTextField
 from django.contrib.auth import login, logout, authenticate
 from django.db.models import Q
@@ -51,7 +54,7 @@ class BaseView(View):
 
 
 class PanelLogout(LogoutView):
-    template_name = 'App/index.html'
+    template_name = 'App/panel_logout.html'
 
 class PanelView(LoginRequiredMixin, ListView):
     
@@ -63,14 +66,19 @@ class PanelView(LoginRequiredMixin, ListView):
 class AnuncioCreateView(LoginRequiredMixin, CreateView):
     model = Anuncio
     fields = ['titulo','materia', "autor", 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
+    widgets = {'autor': forms.TextInput(attrs={'type': 'hidden'})}
     template_name = "App/anuncio_creacion.html"
-    success_url = reverse_lazy("panel-usuario")
+    success_url = reverse_lazy("operacion-ok")
+    def get_initial(self):
+        return {'autor': self.request.user}
+
+
 
 class AnuncioUpdateView(LoginRequiredMixin, UpdateView):
     model = Anuncio
     template_name = "App/anuncio_update.html"
     fields = ['titulo','materia' , 'autor', 'imagen', 'descripcion_clase', 'date_created', 'date_updated']
-    success_url = reverse_lazy('panel-usuario')
+    success_url = reverse_lazy('operacion-ok')
     
 
 class AnuncioDeleteView(LoginRequiredMixin, BaseView, DeleteView):
@@ -94,10 +102,10 @@ class AnuncioDetailView(DetailView):
 
 class RegistroUsuario(SuccessMessageMixin, CreateView):
     template_name = "sign-up.html"
-    success_url = reverse_lazy("panel-usuario")
+    success_url = reverse_lazy("operacion-ok")
     form_class = UserCreationForm
-    success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
-
+    #success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
+    
 class PerfilUsuario(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     model = Usuario
@@ -106,23 +114,32 @@ class PerfilUsuario(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     def test_func(self):
         return self.request.user.id == int(self.kwargs['pk'])
 
-class UsuarioUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
-    model = User
-    #model = Usuario
-    template_name = "App/edicion-usuario.html"
-    fields = ["username", "password", "email", "first_name", "last_name", ]
-    #fields = ["celular", "descripcion_docente", "provincia"]
-    def get_success_url(self):
-        return reverse_lazy("usuario-update", kwargs={"pk": self.request.user.id})
-    
-    def test_func(self):
-        return self.request.user.id == int(self.kwargs['pk'])
+@login_required
+@transaction.atomic
+def profile_update(request, pk):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UsuarioForm(request.POST, instance=request.user.usuario)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, ('Your profile was successfully updated!'))
+            return redirect('operacion-ok')
+        else:
+            messages.error(request, _('Please correct the error below.'))
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UsuarioForm(instance=request.user.usuario)
+    return render(request, 'App/edicion-usuario.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
 
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
-    next_page = reverse_lazy("panel-usuario")
+    next_page = reverse_lazy("operacion-ok")
 
 
 
@@ -199,28 +216,6 @@ from django.contrib.auth.models import User
 from App.forms import ProfileForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
-def profile_update(request, pk):
-    user = get_object_or_404(User, pk=pk)
-  
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
-
-        if form.is_valid():
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
-            user.save()
-
-            return HttpResponseRedirect(reverse('usuario-update', args=[user.id]))
-    else:
-        default_data = {'first_name': user.first_name, 'last_name': user.last_name,
-                    }
-        form = ProfileForm(default_data)
-
-    return render(request, 'edicion-usuario.html', {'form': form, 'user': user})
-
-
-
 
 from django.shortcuts import render, redirect
 from .forms import FormularioContacto

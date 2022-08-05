@@ -1,21 +1,10 @@
+Luego de crear usuario va a "operacion-ok". Pero luego no toma el user en el link. 
+    Hipotesis, al crear usuario no logea, con lo cual no sabe a qué panel de usuario ir.. 
+    Solución, ir a login y entrar con el usuario creado. 
+    Comentario: creo que por eso no funciona para dirigirlo directamente a "perfil", porque no asigna un id.
 
+El "form" de create y edit es distinto. Con lo cual, cuando vas a Edit, tenes mejores formatos para aplicar que desde create.
 
+Cuando se va al detalle del aviso no se ve foto, es decir, que faltan elementos del model Avisos.
 
-VISTA Y EDICION DE LOS DATOS DEL USUARIO
-    VER DATOS DE USUARIO
-    MODIFICAR USUARIO? CREO Q NO ES NECESARIO
-
-
-
-<script type="text/javascript">
-    function ConfirmDelete()
-    {
-        var respuesta = confirm("Esta seguro que desea eliminar el anuncio?");
-
-        if (respuesta == true)
-        {return true;}
-        else
-        {return false;}
-    }
-
-</script>
+Habría que crear view, template y url para eliminar usuario?
