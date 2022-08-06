@@ -79,7 +79,7 @@ class AnuncioDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #context['anuncio'] = Anuncio.objects.order_by('date_updated').first()
-        context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
+        #context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
         return context
     
 
