@@ -1,8 +1,12 @@
 {% extends "App/base.html" %}
 
 {% block main %}
+<br>
+
 <body>
 <div class="container">
+  <h2>Crea tu usuario.</h2>
+  <br>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
