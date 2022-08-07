@@ -17,7 +17,6 @@ from django.views import generic
 from App.models import Anuncio, Usuario
 from .forms import *
 from ckeditor.fields import RichTextField
-from App.forms import ProfileForm
 
 def MainPageView(request):
     queryset = request.GET.get("buscar")    
@@ -90,7 +89,17 @@ class RegistroUsuario(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("login")
     form_class = UserCreationForm
     success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"    
-    
+
+
+
+class UserProfile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+
+    model = Usuario
+    template_name = "detalles-usuario.html"
+
+    def test_func(self):
+        return self.request.user.id == int(self.kwargs['pk'])
+
 @login_required
 @transaction.atomic
 def profile_update(request, pk):

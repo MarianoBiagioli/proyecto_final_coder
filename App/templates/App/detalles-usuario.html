@@ -1,19 +1,25 @@
-{% extends "App/base.html" %}
+{% extends "App/base-usuarios.html" %}
 
 {% block main %}
-  
-<br>
-<br>
-
-<h2>{{ user.get_full_name }}</h2>
-<ul>
-  <li>Usuario: {{ user.username }}</li>
-  <li>Nro de Celular : {{ user.usuario.celular }}</li>
-  <li>Fecha de creación: {{ user.usuario.date_created }}</li>
-</ul>
-
-
-
+<main class="flex-shrink-0">
+  <div class="container">
+    <div style="margin:80px">
+      <h1>Datos del Perfil:</h1>
+      <br>
+      <!--tratar de meter avatar-->
+      <h2>{{ user.get_full_name }}</h2>
+      <ul>
+        <li>Celular: {{ usuario.celular }}</li>
+        <li>Celular: {{ user.email }}</li>
+        <li>Provincia: {{ usuario.provincia }}</li>
+        <li>Pais: {{ usuario.pais }}</li>
+        <li>Usuario de la plataforma desde: {{ usuario.date_created }}</li>
+      </ul>
+      <p>Descripción del docente: {{ usuario.descripcion_docente }}</p>
+        <a type="button" href = "{% url 'perfil' user.id %}" style="margin-top: 1em;" class="btn btn-sm btn-outline-primary" >Volver</a>
+    </div>
+  </div>  
+</main>
 {% endblock %}
 
 
