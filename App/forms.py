@@ -1,5 +1,7 @@
 from django import forms
 from App.models import User, Usuario
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -24,3 +26,9 @@ class FormularioContacto(forms.Form):
     telefono = forms.CharField(max_length=50)
     mensaje = forms.CharField(widget = forms.Textarea, max_length = 2000)
     
+class UserRegisterForm(UserCreationForm):
+  email = forms.EmailField()
+
+  class Meta:
+      model = User
+      fields = ['username', 'email', 'first_name']

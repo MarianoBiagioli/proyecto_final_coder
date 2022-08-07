@@ -1,22 +1,23 @@
-from django.urls import reverse_lazy
-from django.shortcuts import render
+from django import forms
+from django.db import models, transaction 
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView, TemplateView, View, ListView, UpdateView, DetailView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy, reverse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import CreateView, TemplateView, View, ListView, UpdateView, DetailView, DeleteView
+from django.views import generic
 from App.models import Anuncio, Usuario
-from django import forms
 from .forms import *
-from django.contrib import messages
-
-# ver de borrar lo de abajo si no se usa
-from django.db import models, transaction 
 from ckeditor.fields import RichTextField
-from django.contrib.auth import login, logout, authenticate
-from django.db.models import Q
+from App.forms import ProfileForm
 
 def MainPageView(request):
     queryset = request.GET.get("buscar")    
@@ -39,28 +40,13 @@ class BaseView(View):
         context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_created').first()
         return context 
 
-    #    if queryset:
-    #        anuncios = Anuncio.objects.filter(
-    #        Q(titulo__icontains = queryset) |
-    #        Q(descripcion__icontains = queryset)
-    #    ).distinct()
-    #    return render(request, "index.html", {'anuncios': anuncios})
+class UsuarioLogin(LoginView):
+    template_name = 'App/log-in.html'
+    next_page = reverse_lazy("operacion-ok")
 
-
-#class PanelLogin(SuccessMessageMixin, LoginView, CreateView):
-    #template_name = 'App/log-in.html'
-   # success_url = reverse_lazy("index")
-    #success_message = "¡Bienvenido!"
-
-
+   
 class PanelLogout(LogoutView):
     template_name = 'App/panel_logout.html'
-
-class PanelView(LoginRequiredMixin, ListView):
-    
-    queryset = Anuncio.objects.all()
-    template_name = "App/anuncios.html"    
-    context_object_name = "anuncios"
 
 
 class AnuncioCreateView(LoginRequiredMixin, CreateView):
@@ -71,8 +57,6 @@ class AnuncioCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("operacion-ok")
     def get_initial(self):
         return {'autor': self.request.user}
-
-
 
 class AnuncioUpdateView(LoginRequiredMixin, UpdateView):
     model = Anuncio
@@ -94,7 +78,8 @@ class AnuncioDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['anuncio'] = Anuncio.objects.order_by('date_updated').first()
+        #context['anuncio'] = Anuncio.objects.order_by('date_updated').first()
+        #context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
         return context
     
 
@@ -102,19 +87,10 @@ class AnuncioDetailView(DetailView):
 
 class RegistroUsuario(SuccessMessageMixin, CreateView):
     template_name = "sign-up.html"
-    success_url = reverse_lazy("operacion-ok")
+    success_url = reverse_lazy("login")
     form_class = UserCreationForm
-    #success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"
+    success_message = "¡¡ Se creo tu perfil satisfactoriamente !!"    
     
-class PerfilUsuario(LoginRequiredMixin, UserPassesTestMixin, DetailView):
-
-    model = Usuario
-    template_name = "App/detalles-usuario.html"
-
-    def test_func(self):
-        return self.request.user.id == int(self.kwargs['pk'])
-
-
 @login_required
 @transaction.atomic
 def profile_update(request, pk):
@@ -137,20 +113,10 @@ def profile_update(request, pk):
     })
 
 
-class UsuarioLogin(LoginView):
-    template_name = 'App/log-in.html'
-    next_page = reverse_lazy("operacion-ok")
-
-
-
-
 # Create your views here.
 class Success(TemplateView):
 
     template_name = "App/operacion-ok.html"
-    
-   # def test_func(self):
-   #     return self.request.user.id == int(self.kwargs['pk'])
 
 
 
@@ -159,9 +125,7 @@ class About( TemplateView):
     template_name = "App/about.html"
 
 
-   
-
-class PanelUsuario(LoginRequiredMixin, BaseView, ListView,):
+class PanelUsuario(LoginRequiredMixin, BaseView, ListView):
     
     queryset = Anuncio.objects.all()
     template_name = "App/panel_usuario_avisos.html"
@@ -171,62 +135,7 @@ class PanelUsuario(LoginRequiredMixin, BaseView, ListView,):
         return Anuncio.objects.filter(autor=self.request.user)
 
 
-
-
-    #def test_func(self):
-      # return self.request.user.id == int(self.kwargs['pk'])
-
-
-        
-    
-#filter(autor = )
-   # filter(autor=int("pk")).values()
-    #def test_func(self):
-      #return self.request.user.id == int(self.kwargs['pk'])
-
-
-#class PanelView(LoginRequiredMixin, BaseView, ListView):
-    
-   # queryset = Article.objects.all()
-   # template_name = "news_portal/article_list.html"    
-    #context_object_name = "articles"
-
-    
-
-
-#ACA HAY QUE METER ESTO
-
-class PerfilUsuario(LoginRequiredMixin,UserPassesTestMixin, DetailView):
-
-    model = Usuario
-    template_name = "App/detalles-usuario.html"
-
-    def test_func(self):
-      return self.request.user.id == int(self.kwargs['pk'])
-
-
-#ESTA VISTA EST AEN USO Y ES LA QUE LISTA LOS ANUNCIOS
-
-
-
-
-      ###############
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
-from App.forms import ProfileForm
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-
-from django.shortcuts import render, redirect
-from .forms import FormularioContacto
-from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse
-
-
 # PARA FORMULARIO DE CONTACTO
-
-def homepage(request):
-	return render(request, "main/home.html")
 
 def contacto(request):
 	if request.method == 'POST':
@@ -249,7 +158,3 @@ def contacto(request):
       
 	form = FormularioContacto()
 	return render(request, "App/contacto.html", {'form':form})
-
-
-
-
