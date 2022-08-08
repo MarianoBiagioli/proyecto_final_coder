@@ -17,6 +17,7 @@ from django.views import generic
 from App.models import Anuncio, Usuario
 from .forms import *
 from ckeditor.fields import RichTextField
+from django.db.models import Q
 
 def MainPageView(request):
     queryset = request.GET.get("buscar")    

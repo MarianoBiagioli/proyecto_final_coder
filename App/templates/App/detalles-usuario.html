@@ -3,14 +3,14 @@
 {% block main %}
 <main class="flex-shrink-0">
   <div class="container">
-    <div style="margin:80px">
+    <div style="margin:60px">
       <h1>Datos del Perfil:</h1>
-      <br>
-      <!--tratar de meter avatar-->
+        
+      <img class="img-thumbnail rounded" src="{{ usuario.avatar.url }}" width="200" height="200">
       <h2>{{ user.get_full_name }}</h2>
       <ul>
         <li>Celular: {{ usuario.celular }}</li>
-        <li>Celular: {{ user.email }}</li>
+        <li>Correo electrónico: {{ user.email }}</li>
         <li>Provincia: {{ usuario.provincia }}</li>
         <li>Pais: {{ usuario.pais }}</li>
         <li>Usuario de la plataforma desde: {{ usuario.date_created }}</li>
