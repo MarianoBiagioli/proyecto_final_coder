@@ -41,12 +41,12 @@
     {% for anuncio in anuncios %}
      <div class="col-md-4">
       <div class="card mb-6">
-              <img class="card-img-top" src= "{{anuncio.imagen}}" >
+              <img class="card-img-top" src= "{{anuncio.imagen.url}}" >
               <div class="card-body">
-                  <p class="card-title">{{ anuncio.tiulo }}</p>
-                  <p class="card-text">{{ anuncio.autor }}</p>
+                  <p class="card-title">{{ anuncio.titulo }}</p>
+                  <p class="card-text">{{ user.first_name}} {{user.last_name}}</p>
                   <p class="card-text">{{ anuncio.materia }}</p>
-                  <p class="card-text">{{ anuncio.descripcion_clase}}</p>
+                  <p class="card-text">{{ anuncio.descripcion_clase |safe }}</p>
                 
                   <a href="{% url 'anuncio-detalle' anuncio.id %}"
                      class="btn btn-primary">
