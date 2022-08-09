@@ -33,12 +33,7 @@ def save_user_usuario(sender, instance, **kwargs):
 class Anuncio(models.Model):
     titulo = models.CharField(max_length=100)
     materia = models.CharField(max_length=180)
-    autor = models.ForeignKey(
-    User,
-    models.SET_NULL,
-    blank=True,
-    null=True,
-    )
+    autor = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
     imagen = models.ImageField(upload_to="App\static", null=True, blank=True) #sacamos cuando podamos meter imagen usuario
     descripcion_clase = RichTextField()
     date_created = models.DateTimeField(default=timezone.now)
