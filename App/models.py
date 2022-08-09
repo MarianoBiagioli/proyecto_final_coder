@@ -19,6 +19,10 @@ class Usuario(models.Model):
 
     def __str__(self):
         return f"{self.user.last_name}, {self.user.first_name}"
+    
+    def avatar_url(self):
+        if self.avatar and hasattr(self.avatar, 'url'):
+            return self.avatar.url
 
 @receiver(post_save, sender=User)
 def create_user_usuario(sender, instance, created, **kwargs):
@@ -34,7 +38,7 @@ class Anuncio(models.Model):
     titulo = models.CharField(max_length=100)
     materia = models.CharField(max_length=180)
     autor = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
-    imagen = models.ImageField(upload_to="App\static", null=True, blank=True) #sacamos cuando podamos meter imagen usuario
+    imagen = models.ImageField(upload_to="App\static", null=True, blank=True) 
     descripcion_clase = RichTextField()
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)
