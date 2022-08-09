@@ -15,7 +15,7 @@
         <li>Pais: {{ usuario.pais }}</li>
         <li>Usuario de la plataforma desde: {{ usuario.date_created }}</li>
       </ul>
-      <p>Descripción del docente: {{ usuario.descripcion_docente }}</p>
+      <p>Descripción del docente: {{ usuario.descripcion_docente | safe }}</p>
         <a type="button" href = "{% url 'perfil' user.id %}" style="margin-top: 1em;" class="btn btn-sm btn-outline-primary" >Volver</a>
     </div>
   </div>  

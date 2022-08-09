@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from App.views import (MainPageView, RegistroUsuario, PanelUsuario, UserProfile, Success, About, AnuncioDetailView, AnuncioCreateView, 
+from App.views import (MainPageView, RegistroUsuario, PanelUsuario, UserProfile, Success, About, AnuncioDetailView, AnuncioDetailViewUsuario, AnuncioCreateView, 
 AnuncioUpdateView, AnuncioDeleteView, UsuarioLogin, PanelLogout, contacto, profile_update, PanelUsuario)
 from django.conf import settings
 from django.conf.urls.static import static
@@ -17,6 +17,7 @@ urlpatterns = [
     path('contacto/', contacto, name="contacto"), #contacto
     
     path('anuncio/<pk>/', AnuncioDetailView.as_view(), name='anuncio-detalle'), #ver el detalle de los anuncios
+    path('anuncio-usuario/<pk>/', AnuncioDetailViewUsuario.as_view(), name='anuncio-detalle-usuario'), #ver el detalle de los anuncios
     path('anuncio/create', AnuncioCreateView.as_view(), name ="anuncio-create" ), #Crear anuncio
     path('anuncio/<pk>/update', AnuncioUpdateView.as_view(), name ="anuncio-update" ), #modifica anuncio
     path('anuncio/<pk>/delete', AnuncioDeleteView.as_view(), name ="anuncio-delete" ), #elimina avisos

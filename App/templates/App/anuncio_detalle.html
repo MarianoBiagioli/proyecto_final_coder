@@ -21,7 +21,11 @@
         <img height="225" src="{{anuncio.imagen.url}}" /> 
       </div>
       <div style="padding-top: 2em;">
+        {% autoescape off %}
+
        {{anuncio.descripcion_clase | safe }}
+
+       {% endautoescape %}
       </div>
     </div>
   </main>

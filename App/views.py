@@ -19,26 +19,41 @@ from .forms import *
 from ckeditor.fields import RichTextField
 from django.db.models import Q
 
-def MainPageView(request):
-    queryset = request.GET.get("buscar")    
-    print(queryset)
-    anuncios = Anuncio.objects.all()
-
-    if queryset:
-        anuncios = Anuncio.objects.filter(
-            Q(materia__icontains = queryset) |
-            Q(descripcion_clase__icontains = queryset)
-        ).distinct()
-
-    return render(request, "index.html", {'anuncios': anuncios})
-
 
 class BaseView(View):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_created').first()
+        #context['usuario'] = Usuario.objects.filter(user=True).order_by('date_created').first()
+        #context['usuario'] = Usuario.objects.order_by('date_created').first()
         return context 
+
+#class MainPageView(BaseView, ListView):
+#    queryset = Anuncio.objects.all()
+#    context_object_name = "anuncios"
+#    template_name = "App/index.html"
+
+#    def get_context_data(self, **kwargs):
+#        context = super(MainPageView,self).get_context_data(**kwargs)
+#        context['usuario'] = Usuario.objects.all()
+#        return context 
+
+def MainPageView(request):
+    queryset = request.GET.get("buscar")    
+    print(queryset)
+    anuncios = Anuncio.objects.all()
+    usuarios = Usuario.objects.all()
+
+    if queryset:
+        anuncios = Anuncio.objects.filter(
+            Q(materia__icontains = queryset) |
+            Q(titulo__icontains = queryset) |
+            Q(descripcion_clase__icontains = queryset)
+       ).distinct()
+
+    return render(request, "index.html", {'anuncios': anuncios, 'usuarios': usuarios})
+
 
 class UsuarioLogin(LoginView):
     template_name = 'App/log-in.html'
@@ -78,10 +93,19 @@ class AnuncioDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #context['anuncio'] = Anuncio.objects.order_by('date_updated').first()
-        #context['titulo'] = Anuncio.objects.filter(titulo=True).order_by('date_updated').first()
+        context['usuario'] = Usuario.objects.all()
         return context
     
+
+class AnuncioDetailViewUsuario(DetailView):
+    model = Usuario
+    template_name = "App/anuncio_detalle.html"
+    context_object_name = "usuario"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['usuario'] = Usuario.objects.order_by('date_updated').first()
+        return context
 
 #Desde acá vistas por tema Usuario/Autor anuncios
 
@@ -100,6 +124,7 @@ class UserProfile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def test_func(self):
         return self.request.user.id == int(self.kwargs['pk'])
+
 
 @login_required
 @transaction.atomic
