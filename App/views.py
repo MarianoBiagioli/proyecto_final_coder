@@ -29,15 +29,7 @@ class BaseView(View):
         #context['usuario'] = Usuario.objects.order_by('date_created').first()
         return context 
 
-#class MainPageView(BaseView, ListView):
-#    queryset = Anuncio.objects.all()
-#    context_object_name = "anuncios"
-#    template_name = "App/index.html"
 
-#    def get_context_data(self, **kwargs):
-#        context = super(MainPageView,self).get_context_data(**kwargs)
-#        context['usuario'] = Usuario.objects.all()
-#        return context 
 
 def MainPageView(request):
     queryset = request.GET.get("buscar")    
@@ -129,9 +121,10 @@ class UserProfile(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 @login_required
 @transaction.atomic
 def profile_update(request, pk):
+    
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UsuarioForm(request.POST, instance=request.user.usuario)
+        user_form = UserForm(request.POST, request.FILES, instance=request.user)
+        profile_form = UsuarioForm(request.POST, request.FILES, instance=request.user.usuario)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -148,7 +141,6 @@ def profile_update(request, pk):
     })
 
 
-# Create your views here.
 class Success(TemplateView):
 
     template_name = "App/operacion-ok.html"
