@@ -9,6 +9,7 @@
         <p class="lead text-muted">{{anuncio.materia}}</p>
         <img class="img-thumbnail rounded" src="{{ user.usuario.avatar.url }}" width="200" height="200">
         <p class="lead text-muted">{{user.first_name}} {{user.last_name}}</p>
+        <p class="lead text-muted">{{user.usuario.descripcion_docente | safe}}</p>
         <p class="lead text-muted">Correo electrónico: {{user.email}}</p>
         <p class="lead text-muted">Celular: {{user.usuario.celular}}</p>
        

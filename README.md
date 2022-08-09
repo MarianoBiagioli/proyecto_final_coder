@@ -13,6 +13,8 @@ Los usuarios/docentes pueden:
 - Los avisos quedarán visibles desde la página index/principal.
 - Se podrán buscar los avisos desde la misma pagina index/principal.
 
+Para ver video y casos de prueba, ingresar en el siguiente link: https://drive.google.com/drive/folders/1eGIbq_bE5jgghS0KGlGZoHSRxs-JkCMb?usp=sharing
+
 # Instalar 
 
 Para instalar este sitio, se necesitará:
